@@ -1,0 +1,16 @@
+create database bankmanagementsystem;
+
+use bankmanagementsystem;
+
+SET SQL_SAFE_UPDATES = 0;
+
+create table signup(formno varchar(120),name varchar(120),fname varchar(120),dob varchar(130),gender varchar(110),email varchar(120),marital varchar(110),address varchar(150),city varchar(120),state varchar(120),pin varchar(20));
+
+create table signuptwo(formno varchar(120),sreligion varchar(120),scategory varchar(120),sincome varchar(130),seducation varchar(150),soccupation varchar(210),span varchar(120),saadhar varchar(150),senior varchar(120),exisitingAccount varchar(120));
+
+create table signupthree(formno varchar(120),accountType varchar(120),cardnumber varchar(120),pinnumber varchar(130),facility varchar(120));
+
+create table login(formno varchar(120),cardnumber varchar(120),pinnumber varchar(120));
+
+create table bank(pin varchar(120),date varchar(130),type varchar(120),amount varchar(120));
+
