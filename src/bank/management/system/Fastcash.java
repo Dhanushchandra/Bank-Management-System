@@ -73,48 +73,48 @@ public class Fastcash extends JFrame implements ActionListener {
     
     }
     
-    @Override
-    public void actionPerformed(ActionEvent ae){
-        if(ae.getSource() == exit){
+   @Override
+public void actionPerformed(ActionEvent ae){
+    if(ae.getSource() == exit){
+        setVisible(false);
+        new Transactions(pinnumber).setVisible(true);
+    } else {
+        // Get the button that was pressed and the corresponding amount
+        String amount = ((JButton) ae.getSource()).getText().substring(3);
+
+        Conn c = new Conn();
+
+        try{
+            ResultSet rs = c.s.executeQuery("select * from bank where pin = '"+pinnumber+"'");
+            int balance = 0;
+            while(rs.next()){
+                if(rs.getString("type").equals("Deposit")){
+                    balance += Integer.parseInt (rs.getString("amount"));
+                } else {
+                    balance -= Integer.parseInt (rs.getString("amount"));
+                }
+            }
+
+            if(balance < Integer.parseInt(amount)){
+                JOptionPane.showMessageDialog(null, "Insufficient Balance");
+                return;
+            }
+
+            Date date = new Date();
+            String query = "INSERT INTO bank (pin, date, type, amount) VALUES ('" + pinnumber + "', '" + date + "', 'Withdrawl', '" + amount + "')";
+            
+            c.s.executeUpdate(query);
+            JOptionPane.showMessageDialog(null,"Rs "+amount+" Debited Successfully");
+
             setVisible(false);
             new Transactions(pinnumber).setVisible(true);
-        }else if(ae.getSource() == deposit){
-            String amount = ((JButton) ae.getSource()).getText().substring(3);
-            
-            Conn c = new Conn();
-            
-            try{
-            
-                ResultSet rs = c.s.executeQuery("select * from bank where pin = '"+pinnumber+"'");
-                int balance = 0;
-                while(rs.next()){
-                    if(rs.getString("type").equals("Deposit")){
-                        balance += Integer.parseInt (rs.getString("amount"));
-                    }else {
-                         balance -= Integer.parseInt (rs.getString("amount"));
-                    }
-                }
-                
-                if(ae.getSource() != exit && balance < Integer.parseInt(amount)){
-                    JOptionPane.showMessageDialog(null, "Insufficient Balance");
-                    return;
-                }
-                
-                Date date = new Date();
-                 String query = "INSERT INTO bank (pin, date, type, amount) VALUES ('" + pinnumber + "', '" + date + "', 'Withdrawl', '" + amount + "')";
-                
-                 c.s.executeUpdate(query);
-                 JOptionPane.showMessageDialog(null,"Rs "+amount+" Debited Successfully");
-                 
-                 setVisible(false);
-                 new Transactions(pinnumber).setVisible(true);
-                 
-            }catch(Exception e){
-                System.out.println(e);
-            }
-            
+
+        } catch(Exception e){
+            System.out.println(e);
         }
     }
+}
+
     
     public static void main(String args[]){
         new Fastcash("");
